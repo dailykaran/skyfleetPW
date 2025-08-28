@@ -96,4 +96,13 @@ export class FakerData{
         return arrivalDate;
     }
 
+    static getDepartureDay(){
+        const departureDate = faker.date.soon({days: 5}).toLocaleDateString('en-GB')
+        return departureDate;
+    }
+
+    static getArrivalDay(){
+        const arrivalDate = faker.date.soon({days: 10}).toLocaleDateString('en-GB')
+        return arrivalDate;
+    }
 }
