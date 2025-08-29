@@ -4,6 +4,7 @@ import { LoginPage } from '../../pages/login/LoginPage'
 import { LogoutPage } from '../../pages/logout/LogoutPage'
 import {SkyFleetHome} from '../../pages/skyFleetHome/skyFleetHome.page'
 import {Flights} from '../../pages/flights/flights.page'
+import {AirCrafts} from '../../pages/aircrafts/aircrafts.page'
 import { test as spinnerListen } from "./spinnerListen"
 
 type myPages = {
@@ -11,6 +12,7 @@ type myPages = {
     logoutPage: LogoutPage
     skyfleetHome : SkyFleetHome
     flights : Flights
+    airCrafts : AirCrafts
 }
 const baseURL = process.env.BASE_URL;
 const userEmail = process.env.USER_NAME;
@@ -38,6 +40,10 @@ myPages
     flights: async({page, context}, use) => {
         const flights = new Flights(page, context);
         await use(flights);
+    },
+    airCrafts: async({page, context}, use) => {
+        const airCrafts = new AirCrafts(page, context);
+        await use(airCrafts);
     }
 })
 

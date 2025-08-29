@@ -93,4 +93,32 @@ export class Flights{
         await this.assertToastMessage('div.forceToastMessage div.toastContent span.toastMessage', assertText);
     }
 
+    async getFlightNameWarn(){
+        return await this.page.locator('div[data-name="Name"]').innerText();
+    }
+
+    async getFlightNameErrorIcon(){
+        return await this.page.locator('div[part="input-text"] [data-key="error"]').isVisible();
+    }
+
+    async getErrorIconFooter(){
+        return await this.page.locator('.footer-button [data-key="error"]').isVisible()
+    }
+
+    async getErrorDialogTitle(){
+        return await this.page.locator('.container records-record-edit-error-header h2').innerText();
+    }
+
+    async getErrorDialogLinkButton(){
+        return await this.page.locator('records-record-edit-error ul.errorsList a').click();
+    }
+    async getFocusOnFlightNameAndAddName(NewName: string){
+        return await this.page.locator('div[part="input-text"] input[name*="Name"]').fill(NewName);
+    }
+
+    async closeNewFlightDialog(){
+        return this.page.locator('button[title*="Cancel and close"]').click();
+    }
+
+
 }

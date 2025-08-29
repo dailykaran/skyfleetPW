@@ -44,7 +44,7 @@ export default defineConfig({
     {name: 'teardown', testMatch: /.*\.teardown\.ts/},
     {
       name: 'chrome',
-      testMatch: ['tests/flights/*.spec.ts'],
+      testMatch: ['tests/aircrafts/*.spec.ts'],
       use: { ...devices['Desktop Chrome'],
         channel: 'chrome',
         launchOptions: {
