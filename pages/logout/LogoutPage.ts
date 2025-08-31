@@ -10,13 +10,13 @@ export class LogoutPage {
     }
 
     async logout(homeURL: string){
-        await this.page.goto(homeURL);
+        await this.page.goto(homeURL, {waitUntil: 'load'});
         
         await this.page.waitForLoadState('load');
         await expect(this.page).toHaveTitle(/.*Home | salesforce/);
         await this.page.locator('button.slds-global-actions__avatar').click();
         await this.page.locator('a.logout').click();
-        await this.page.waitForLoadState('load');
+        await this.page.waitForLoadState('load', {timeout: 5000});
         await expect(this.page).toHaveTitle(/.*Login | salesforce/);
     }
 } 

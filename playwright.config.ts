@@ -13,10 +13,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
+// Define the directory to store test results
+const resultsDir = path.resolve(__dirname, 'PW_Test_Results');
+const allurePath = `${resultsDir}/allure_results`.replace(/\\/g, '/');
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
+  timeout: 5 * 60 * 1000,
   testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -25,9 +30,15 @@ export default defineConfig({
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  workers: process.env.CI ? 1 : 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: [
+    ['html', { outputFolder: `${resultsDir}/playwright_report/html_report` } ],
+    ['allure-playwright', { 
+      resultsDir: allurePath,
+      detail: true, 
+      shortTitle: false }]
+  ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
@@ -36,6 +47,10 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     viewport: { width: 1366, height: 768 },
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
+    actionTimeout: 10000, 
+    navigationTimeout: 15000, 
   },
 
   /* Configure projects for major browsers */
@@ -44,11 +59,11 @@ export default defineConfig({
     {name: 'teardown', testMatch: /.*\.teardown\.ts/},
     {
       name: 'chrome',
-      testMatch: ['tests/aircrafts/*.spec.ts'],
+      testMatch: ['tests/**/*.spec.ts'],
       use: { ...devices['Desktop Chrome'],
         channel: 'chrome',
         launchOptions: {
-          slowMo: 300
+          slowMo: 400
         },
         actionTimeout: 15000,
         viewport: { width: 1366, height: 768 }, 

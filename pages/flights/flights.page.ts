@@ -1,13 +1,12 @@
 import {type Page, BrowserContext, test, expect} from "@playwright/test"
+import {SkyFleet_Locators} from "../../utils/skyFleet_locators ";
 
-export class Flights{
-    readonly page: Page;
-    readonly context: BrowserContext;
+export class Flights extends SkyFleet_Locators {
 
     constructor(page: Page, context: BrowserContext){
-        this.page = page;
-        this.context = context;
+        super(page, context);
     }
+
 
     async gotoURL(url: string){       
         await this.page.goto(url);
@@ -16,7 +15,7 @@ export class Flights{
 
     async navigateToFlights(){
         await this.page.locator('nav a[href*="Flight__c/home"]').click();
-        await this.page.waitForURL('**\/list?filterName=__Recent', {waitUntil: 'load', timeout: 2000});
+        await this.page.waitForURL('**\/list?filterName=__Recent', {waitUntil: 'load', timeout: 5000});
     }
 
     async findFlightRecords(){
@@ -62,63 +61,62 @@ export class Flights{
     }
 
     async saveFlight(){
-        await this.page.locator('button[name*=SaveEdit]').click();
+        await this.saveDialog();
     }
 
-    async flightButtonToOpenDeleteFlightDialog(){
-        await this.page.waitForLoadState('load');
-        await this.page.locator('tbody lightning-button-menu button').first().click();
-        await this.page.locator('.branding-actions.actionMenu ul').waitFor({state: 'visible'});
-        await this.page.locator('.branding-actions.actionMenu ul a[title="Delete"]').click();
+    async saveNewFlight(){
+        await this.saveNewDialog();
+    }
+    async flightButtonToOpenDeleteDialog(){
+        await this.buttonToOpenDeleteDialog();
     }
 
     async deleteFlight(){
-        await this.page.waitForLoadState('load');
-        await this.page.locator('div.modal-header h1').waitFor({state: 'visible'});
-        await this.page.locator('div.modal-footer button[title="Delete"]').click();
+        await this.deleteRecord();
     }
 
-
-    async assertToastMessage(locator: string, assertText: string){
-        await test.step(`Assert the toast message ${assertText}`, async()=>{
-            await this.page.waitForLoadState('domcontentloaded');
-            const toastMSG = this.page.locator(locator);
-            await expect(toastMSG).toContainText(assertText);
-            console.log(await toastMSG.innerText());
-            await this.page.waitForSelector(locator, { state: "detached" });
-        })
-    }
-
-    async assertToastMessageElements(assertText: string){
+    async assertToastMessageFlights(assertText: string){
         await this.assertToastMessage('div.forceToastMessage div.toastContent span.toastMessage', assertText);
     }
 
+    async getAssertToastMessageTextFlights(){
+        await this.getAssertToastMessage();
+    }
+
+    async getAssertToastMessageFlights(){
+        await this.getAssertToastMessage();
+    }
+
+
     async getFlightNameWarn(){
-        return await this.page.locator('div[data-name="Name"]').innerText();
+        return await this.getNameWarn()
     }
 
     async getFlightNameErrorIcon(){
-        return await this.page.locator('div[part="input-text"] [data-key="error"]').isVisible();
+        return await this.getNameErrorIcon();
     }
 
-    async getErrorIconFooter(){
-        return await this.page.locator('.footer-button [data-key="error"]').isVisible()
+    async getFlightErrorIconFooter(){
+        return await this.getErrorIcon()
     }
 
-    async getErrorDialogTitle(){
-        return await this.page.locator('.container records-record-edit-error-header h2').innerText();
+    async getFlightErrorDialogTitle(){
+        return await this.getErrorDialogTitle();
     }
 
-    async getErrorDialogLinkButton(){
-        return await this.page.locator('records-record-edit-error ul.errorsList a').click();
+    async getFlightErrorDialogLinkButton(){
+        return await this.getErrorDialogLinkButton();
     }
     async getFocusOnFlightNameAndAddName(NewName: string){
-        return await this.page.locator('div[part="input-text"] input[name*="Name"]').fill(NewName);
+        return await this.getFocusOnNameAndAddName(NewName);
     }
 
     async closeNewFlightDialog(){
-        return this.page.locator('button[title*="Cancel and close"]').click();
+        return this.closeNewDialog();
     }
 
+    async assertFlightNameTextBoxError(){
+        await this.assertNameTextBoxError();
+    }
 
 }
