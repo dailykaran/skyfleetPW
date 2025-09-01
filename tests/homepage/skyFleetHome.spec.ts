@@ -11,7 +11,7 @@ test(`Verify the SkyFleet home page`, async ({skyfleetHome})=>{
     await skyfleetHome.clickViewAll();
     await skyfleetHome.clickSearchApps('SkyFleet');
     await skyfleetHome.clickAppLink('SkyFleet');
-    await skyfleetHome.page.waitForURL(skyfleetHome.page.url(), {waitUntil: 'load', timeout: 9000});
+    await skyfleetHome.page.waitForURL('**/Account/**', {waitUntil: 'load', timeout: 9000});
     await expect(skyfleetHome.page.url()).toContain('Account');
     await console.log(skyfleetHome.page.url());
     

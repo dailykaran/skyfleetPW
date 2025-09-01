@@ -26,8 +26,8 @@ export class LoginPage {
     
         //console.log(await this.page.locator('#Login').getAttribute('value'));
         await this.page.locator('#Login').click();
-        await this.page.waitForURL(/.*SetupOneHome/, {waitUntil: 'load', timeout: 5000});
-        await expect(this.page).toHaveURL(/.*SetupOneHome/);
+        await this.page.waitForURL(/.*home/, {waitUntil: 'load', timeout: 5000});
+        await expect(this.page).toHaveURL(/.*home/);
         await this.page.waitForLoadState('load');
         await expect(this.page).toHaveTitle(/.*Home | salesforce/);
         await this.page.context().storageState({path: authFile});
