@@ -1,48 +1,64 @@
-# File: .github/workflows/playwright.yml
-
-name: Playwright Tests
+name: Playwright CI
 
 on:
   push:
-    branches: [ main, master ]
+    branches:
+      - master
   pull_request:
-    branches: [ main, master ]
+    types: [opened, synchronize, reopened]
+  schedule:
+    - cron: '0 3 * * *'
 
 jobs:
   test:
+    concurrency:
+      group: "playwright-${{ github.ref }}"
+      cancel-in-progress: true
+
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        browser: [chromium, firefox, webkit]
-        node-version: [16.x]
+        os: [ubuntu-latest]
+        browser: [chromium]
+        node-version: [14.x, 16.x]
+        screen: ['1280x720', '1920x1080']
+
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: npm
+          cache: 'npm'
+
+      - name: Cache npm modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install dependencies
         run: npm ci
 
+      - name: Cache Playwright browsers
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ matrix.os }}-${{ hashFiles('**/playwright.config.ts') }}
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      - name: Run tests on ${{ matrix.browser }}
-        run: npx playwright test --project=${{ matrix.browser }} --reporter=list,junit,html
-
-      - name: Upload JUnit XML Results
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: junit-${{ matrix.os }}-${{ matrix.browser }}
-          path: test-results/*.xml
+      - name: Run Playwright Tests
+        run: |
+          npx playwright test \
+            --project=${{ matrix.browser }} \
+            --workers=1 \
+            --reporter=html
 
       - name: Upload HTML Report
         if: always()
@@ -50,3 +66,4 @@ jobs:
         with:
           name: html-report-${{ matrix.os }}-${{ matrix.browser }}
           path: playwright-report
+
