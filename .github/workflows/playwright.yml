@@ -31,11 +31,8 @@ jobs:
     - name: Install Playwright browsers
       run: npx playwright install --with-deps
 
-    - name: Secure the file
-    run: chmod 600 .env
-
     - name: Run Playwright tests
-      run: npx dotenv -e $CUSTOM_ENV_PATH -- npx playwright test
+      run: npx dotenv -e ./.env -- npx playwright test
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
