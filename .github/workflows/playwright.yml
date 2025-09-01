@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [ main, master ]
 env:
-  CUSTOM_ENV_PATH: ././.env
+  CUSTOM_ENV_PATH: ./.env
 
 jobs:
   playwright-tests:
@@ -30,6 +30,9 @@ jobs:
 
     - name: Install Playwright browsers
       run: npx playwright install --with-deps
+
+    - name: Secure the file
+    run: chmod 600 .env
 
     - name: Run Playwright tests
       run: npx dotenv -e $CUSTOM_ENV_PATH -- npx playwright test
