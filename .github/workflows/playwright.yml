@@ -4,6 +4,8 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+env:
+  CUSTOM_ENV_PATH: ././.env
 jobs:
   test:
     timeout-minutes: 60
@@ -18,7 +20,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
-      run: npx playwright test tests/homepage/skyFleetHome.spec.ts
+      run: npx dotenv -e $CUSTOM_ENV_PATH -- npx playwright test
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
