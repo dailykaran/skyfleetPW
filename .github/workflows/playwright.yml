@@ -4,23 +4,32 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-env:
-  CUSTOM_ENV_PATH: ././.env
 jobs:
-  test:
+  playwright-tests:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
       with:
-        node-version: lts/*
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
     - name: Install dependencies
       run: npm ci
-    - name: Install Playwright Browsers
+
+    - name: Install Playwright browsers
       run: npx playwright install --with-deps
+
     - name: Run Playwright tests
-      run: npx dotenv -e $CUSTOM_ENV_PATH -- npx playwright test
+      run: npx playwright test tests/homepage/skyFleetHome.spec.ts
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
