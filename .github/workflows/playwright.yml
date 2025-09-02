@@ -4,7 +4,13 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-
+env:
+  BASE_URL: ${{ secrets.BASE_URL }}
+  USER_NAME: ${{ secrets.USER_NAME }}
+  PASS_WORD: ${{ secrets.PASS_WORD }}
+  HOME_URL: ${{ secrets.HOME_URL }}
+  SKYFLEET_HOME: ${{ secrets.SKYFLEET_HOME }}
+  
 jobs:
   playwright-tests:
     timeout-minutes: 60
@@ -31,7 +37,7 @@ jobs:
 
     - name: Run Playwright tests
       run: 
-        DOTENV_CONFIG_QUIET=true npx dotenv -e .env -- npx playwright test
+        npx dotenv -e .env -- npx playwright test
         
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
