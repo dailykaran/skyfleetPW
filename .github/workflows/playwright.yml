@@ -5,11 +5,11 @@ on:
   pull_request:
     branches: [ main, master ]
 env:
-  BASE_URL: ${{ secrets.BASE_URL }}
+  BASE_URL: ${{ vars.BASE_URL }}
   USER_NAME: ${{ secrets.USER_NAME }}
   PASS_WORD: ${{ secrets.PASS_WORD }}
-  HOME_URL: ${{ secrets.HOME_URL }}
-  SKYFLEET_HOME: ${{ secrets.SKYFLEET_HOME }}
+  HOME_URL: ${{ vars.HOME_URL }}
+  SKYFLEET_HOME: ${{ vars.SKYFLEET_HOME }}
   
 jobs:
   playwright-tests:
@@ -34,11 +34,11 @@ jobs:
     
     - name: Create .env file
       run: 
-          echo "BASE_URL=${{ secrets.BASE_URL }}" >> .env
-          echo "USER_NAME=${{ secrets.API_KEY }}" >> .env
-          echo "PASS_WORD=${{ secrets.BASE_URL }}" >> .env
-          echo "HOME_URL=${{ secrets.API_KEY }}" >> .env
-          echo "SKYFLEET_HOME:${{ secrets.SKYFLEET_HOME }}" >> .env
+          echo "BASE_URL=${{ vars.BASE_URL }}" >> .env
+          echo "USER_NAME=${{ secrets.USER_NAME }}" >> .env
+          echo "PASS_WORD=${{ secrets.PASS_WORD }}" >> .env
+          echo "HOME_URL=${{ vars.HOME_URL }}" >> .env
+          echo "SKYFLEET_HOME:${{ vars.SKYFLEET_HOME }}" >> .env
           
     - name: Install Playwright browsers
       run: npx playwright install --with-deps
