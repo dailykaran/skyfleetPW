@@ -28,13 +28,14 @@ jobs:
 
     - name: Install Playwright browsers
       run: npx playwright install --with-deps
+    
     - name: Run tests with sensitive data
       env: 
         BASE_URL: ${{ secrets.BASE_URL }}
-        USER_NAME: ${{ secrets.USER_NAME}}
-        PASS_WORD: ${{ secrets.PASS_WORD}}
-        HOME_URL: ${{ secrets.HOME_URL}}
-        SKYFLEET_HOME: ${{ secrets.SKYFLEET_HOME}}
+        USER_NAME: ${{ secrets.USER_NAME }}
+        PASS_WORD: ${{ secrets.PASS_WORD }}
+        HOME_URL: ${{ secrets.HOME_URL }}
+        SKYFLEET_HOME: ${{ secrets.SKYFLEET_HOME }}
       
     - name: Run Playwright tests
       run: npx dotenv -e .env -- npx playwright test
