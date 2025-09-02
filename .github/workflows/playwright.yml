@@ -34,12 +34,12 @@ jobs:
           echo "HOME_URL=https://psvpec9-dev-ed.develop.lightning.force.com/lightning/setup/SetupOneHome/home" >> .env
           echo "SKYFLEET_HOME=https://psvpec9-dev-ed.develop.lightning.force.com/lightning/n/standard-ApprovalsHome " >> .env
       env:
-        key: main
+        key: master
     - name: Install Playwright browsers
       run: npx playwright install --with-deps
 
     - name: Run Playwright tests
-      run: npx playwright test
+      run: npx dotenv -e .env -- npx playwright test
         
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
