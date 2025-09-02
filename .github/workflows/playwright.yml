@@ -31,7 +31,15 @@ jobs:
 
     - name: Install dependencies
       run: npm ci
-
+    
+    - name: Create .env file
+      run: 
+          echo "BASE_URL=${{ secrets.BASE_URL }}" >> .env
+          echo "USER_NAME=${{ secrets.API_KEY }}" >> .env
+          echo "PASS_WORD=${{ secrets.BASE_URL }}" >> .env
+          echo "HOME_URL=${{ secrets.API_KEY }}" >> .env
+          echo "SKYFLEET_HOME:${{ secrets.SKYFLEET_HOME }}" >> .env
+          
     - name: Install Playwright browsers
       run: npx playwright install --with-deps
 
