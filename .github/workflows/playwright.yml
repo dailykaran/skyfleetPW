@@ -12,7 +12,13 @@ jobs:
     strategy:
       matrix:
         node-version: [20.x]
-
+    env:
+      BASE_URL: ${{ secrets.BASE_URL }}
+      USER_NAME: ${{ secrets.USER_NAME}}
+      PASS_WORD: ${{ secrets.PASS_WORD}}
+      HOME_URL: ${{ secrets.HOME_URL}}
+      SKYFLEET_HOME: ${{ secrets.SKYFLEET_HOME}}
+      
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -25,14 +31,6 @@ jobs:
 
     - name: Install dependencies
       run: npm ci
-    
-    - name: Create .env file
-      run: 
-          echo "BASE_URL=https://login.salesforce.com/" >> .env
-          echo "USER_NAME=divi@sfdcpsvpec2025.com" >> .env
-          echo "PASS_WORD=123456789d" >> .env
-          echo "HOME_URL=https://psvpec9-dev-ed.develop.lightning.force.com/lightning/setup/SetupOneHome/home" >> .env
-          echo "SKYFLEET_HOME=https://psvpec9-dev-ed.develop.lightning.force.com/lightning/n/standard-ApprovalsHome " >> .env
       env:
         key: master
     - name: Install Playwright browsers
