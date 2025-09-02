@@ -25,8 +25,7 @@ jobs:
 
     - name: Install dependencies
       run: npm ci
-      env:
-        key: master
+
     - name: Install Playwright browsers
       run: npx playwright install --with-deps
     - name: Run tests with sensitive data
@@ -36,7 +35,7 @@ jobs:
         PASS_WORD: ${{ secrets.PASS_WORD}}
         HOME_URL: ${{ secrets.HOME_URL}}
         SKYFLEET_HOME: ${{ secrets.SKYFLEET_HOME}}
-
+      
     - name: Run Playwright tests
       run: npx dotenv -e .env -- npx playwright test
         
