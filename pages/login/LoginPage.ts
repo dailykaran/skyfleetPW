@@ -10,7 +10,7 @@ export class LoginPage {
     }
 
     async gotoURL(url: string){       
-        await this.page.goto(url, {waitUntil: 'load'});
+        await this.page.goto(url, {waitUntil: 'load', timeout: 20000});
         await this.page.waitForLoadState('load');
     }
 

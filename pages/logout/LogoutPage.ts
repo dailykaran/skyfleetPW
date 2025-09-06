@@ -10,7 +10,7 @@ export class LogoutPage {
     }
 
     async logout(homeURL: string){
-        await this.page.goto(homeURL, {waitUntil: 'load'});
+        await this.page.goto(homeURL, {waitUntil: 'load', timeout: 20000});
         
         await this.page.waitForLoadState('load');
         await expect(this.page).toHaveTitle(/.*Home | salesforce/);

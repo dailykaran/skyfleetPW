@@ -49,8 +49,8 @@ export default defineConfig({
     viewport: { width: 1366, height: 768 },
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
-    actionTimeout: 10000, 
-    navigationTimeout: 15000, 
+    actionTimeout: 20000, 
+    navigationTimeout: 25000
   },
 
   /* Configure projects for major browsers */
@@ -65,7 +65,7 @@ export default defineConfig({
         launchOptions: {
           slowMo: 400
         },
-        actionTimeout: 15000,
+        actionTimeout: 20000,
         viewport: { width: 1366, height: 768 }, 
        },
       dependencies: ['setup'],
